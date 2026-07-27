@@ -594,8 +594,8 @@
   /* ---- lead form → WhatsApp ---- */
   (function () {
     var WHATSAPP = '5555996516013';
-    // Cole aqui a URL /exec do seu Google Apps Script Web App (deixe '' para desativar).
-    var SHEETS_ENDPOINT = '';
+    // URL /exec do Google Apps Script Web App que grava os leads na planilha.
+    var SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwbTcZfH8QG410jiOZmU6LMj4QF8ZV63ITRb4QW8Z-VWh_wbjZmLPKAZAwQuo0okyZ30Q/exec';
 
     // Envia o lead para a planilha sem bloquear a abertura do WhatsApp (fire-and-forget).
     function sendToSheet(payload) {
