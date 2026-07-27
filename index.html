@@ -263,6 +263,10 @@
   .success-check { width: 60px; height: 60px; margin: .4rem auto 1.1rem; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--green); box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--green) 70%, transparent); }
   .lead-success h3 { font-size: 1.35rem; }
   .lead-success p { color: var(--muted); font-size: .95rem; margin-top: .6rem; }
+  #lead-fields[hidden], #form-fine[hidden] { display: none; }
+  .btn:disabled { cursor: default; opacity: .95; }
+  .btn:disabled:hover { transform: none; }
+  #lead-submit.is-sent { background: var(--green-deep); }
   @keyframes mfade { from { opacity: 0; } }
   @keyframes mpop { from { opacity: 0; transform: translateY(12px) scale(.98); } }
   @media (prefers-reduced-motion: reduce) { .modal-overlay, .modal { animation: none; } }
@@ -567,30 +571,31 @@
     <h3 id="modal-title">Entre para a lista</h3>
     <p class="modal-sub" id="modal-sub">Deixe seus dados e nossa equipe entra em contato para você começar a usar o TravelBot.</p>
     <form id="lead-form" novalidate>
-      <label>Nome
-        <input type="text" name="nome" autocomplete="name" required placeholder="Seu nome completo">
-      </label>
-      <label>E-mail
-        <input type="email" name="email" autocomplete="email" required placeholder="voce@email.com">
-      </label>
-      <label>Telefone
-        <input type="tel" name="telefone" autocomplete="tel" required placeholder="(00) 00000-0000">
-      </label>
-      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <div id="lead-fields">
+        <label>Nome
+          <input type="text" name="nome" autocomplete="name" required placeholder="Seu nome completo">
+        </label>
+        <label>E-mail
+          <input type="email" name="email" autocomplete="email" required placeholder="voce@email.com">
+        </label>
+        <label>Telefone
+          <input type="tel" name="telefone" autocomplete="tel" required placeholder="(00) 00000-0000">
+        </label>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+      </div>
+      <div class="lead-success" id="lead-success" hidden>
+        <div class="success-check" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h3>Recebemos seus dados! 🎉</h3>
+        <p>Obrigado pelo interesse no TravelBot. Nossa equipe vai entrar em contato em breve.</p>
+      </div>
       <button class="btn btn-green" type="submit" id="lead-submit" style="width:100%; margin-top:.4rem;">Enviar meus dados →</button>
-      <p class="form-fine">
+      <p class="form-fine" id="form-fine">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/></svg>
         Seus dados são enviados com segurança para nossa equipe.
       </p>
     </form>
-    <div class="lead-success" id="lead-success" hidden>
-      <div class="success-check" aria-hidden="true">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-      </div>
-      <h3>Recebemos seus dados! 🎉</h3>
-      <p>Obrigado pelo interesse no TravelBot. Nossa equipe vai entrar em contato em breve.</p>
-      <button class="btn btn-ghost" type="button" id="success-close" style="margin-top:1.2rem;">Fechar</button>
-    </div>
   </div>
 </div>
 
@@ -624,16 +629,19 @@
     var form = document.getElementById('lead-form');
     var success = document.getElementById('lead-success');
     var errorEl = document.getElementById('form-error');
+    var fields = document.getElementById('lead-fields');
+    var finePrint = document.getElementById('form-fine');
     var submitBtn = document.getElementById('lead-submit');
     var closeBtn = document.getElementById('modal-close');
-    var successCloseBtn = document.getElementById('success-close');
     var lastFocus = null;
 
     function resetView() {
       success.hidden = true;
-      form.hidden = false;
+      fields.hidden = false;
+      finePrint.hidden = false;
       errorEl.hidden = true;
       submitBtn.disabled = false;
+      submitBtn.classList.remove('is-sent');
       submitBtn.textContent = 'Enviar meus dados →';
       form.querySelectorAll('input').forEach(function (i) { i.removeAttribute('aria-invalid'); });
     }
@@ -664,7 +672,6 @@
       a.addEventListener('click', open);
     });
     closeBtn.addEventListener('click', close);
-    successCloseBtn.addEventListener('click', close);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) close(); });
 
@@ -694,9 +701,13 @@
 
       sendToSheet({ nome: nome, email: email, telefone: tel, origem: 'Landing TravelBot' })
         .then(function () {
-          form.hidden = true;
+          fields.hidden = true;
+          finePrint.hidden = true;
           success.hidden = false;
-          successCloseBtn.focus();
+          submitBtn.disabled = true;
+          submitBtn.classList.add('is-sent');
+          submitBtn.textContent = '✓ Enviado';
+          closeBtn.focus();
         })
         .catch(function () {
           submitBtn.disabled = false;
