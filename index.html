@@ -101,6 +101,8 @@
   .btn-primary:hover { transform: translateY(-2px); background: var(--blue-deep); }
   .btn-green { background: var(--green); color: #fff; box-shadow: 0 12px 26px -12px color-mix(in srgb, var(--green) 70%, transparent); }
   .btn-green:hover { transform: translateY(-2px); background: var(--green-deep); }
+  .btn-telegram { background: #229ED9; color: #fff; box-shadow: 0 12px 26px -12px rgba(34,158,217,.7); }
+  .btn-telegram:hover { transform: translateY(-2px); background: #1B87BA; }
   .btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
   .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
   .btn-sm { padding: .55rem 1rem; font-size: .9rem; border-radius: 10px; }
@@ -225,8 +227,11 @@
   .final-box::after { content: ""; position: absolute; inset: 0; background: radial-gradient(40% 60% at 90% 10%, rgba(53,204,128,.4), transparent 60%); pointer-events: none; }
   .final-box h2 { position: relative; font-size: clamp(1.8rem, 4vw, 2.8rem); color: #fff; max-width: 22ch; margin-inline: auto; }
   .final-box p { position: relative; color: rgba(255,255,255,.85); margin: 1rem auto 0; max-width: 40ch; }
-  .final-box .btn { position: relative; margin-top: 2rem; background: #fff; color: var(--blue-deep); }
+  .final-actions { position: relative; display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; margin-top: 2rem; }
+  .final-box .btn { position: relative; background: #fff; color: var(--blue-deep); }
   .final-box .btn:hover { transform: translateY(-2px); background: #f0f4ff; }
+  .final-box .btn-telegram, .final-actions a[href*="t.me"] { background: #229ED9; color: #fff; }
+  .final-box .btn-telegram:hover, .final-actions a[href*="t.me"]:hover { background: #1B87BA; }
 
   footer { border-top: 1px solid var(--line-soft); padding: 2.4rem 0; color: var(--muted); font-size: .88rem; }
   .foot-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
@@ -239,37 +244,6 @@
     .btn:hover, .card:hover { transform: none; }
   }
   :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
-
-  /* ---------- lead modal ---------- */
-  .modal-overlay { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 1.5rem; background: rgba(8,15,28,.55); backdrop-filter: blur(4px); animation: mfade .2s ease; }
-  .modal-overlay[hidden] { display: none; }
-  .modal { width: min(430px, 100%); background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 2rem 1.8rem; box-shadow: var(--shadow-lg); position: relative; animation: mpop .22s ease; }
-  .modal-close { position: absolute; top: 1rem; right: 1rem; width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--muted); font-size: 1.25rem; line-height: 1; cursor: pointer; transition: color .16s, border-color .16s; }
-  .modal-close:hover { color: var(--ink); border-color: var(--blue); }
-  .modal-badge { display: inline-flex; align-items: center; gap: .4rem; font-size: .78rem; font-weight: 600; color: var(--green-deep); background: var(--green-soft); padding: .3rem .7rem; border-radius: 999px; }
-  .modal h3 { font-size: 1.5rem; margin-top: 1rem; }
-  .modal-sub { color: var(--muted); font-size: .95rem; margin-top: .5rem; }
-  #lead-form { display: flex; flex-direction: column; gap: .85rem; margin-top: 1.4rem; }
-  #lead-form label { display: flex; flex-direction: column; gap: .35rem; font-size: .82rem; font-weight: 600; color: var(--ink-soft); }
-  #lead-form input { font: inherit; font-weight: 400; padding: .72rem .85rem; border-radius: 11px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--ink); transition: border-color .16s, box-shadow .16s; }
-  #lead-form input::placeholder { color: var(--muted); }
-  #lead-form input:focus-visible { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
-  #lead-form input[aria-invalid="true"] { border-color: #d94a4a; }
-  .form-error { color: #d94a4a; font-size: .85rem; margin: 0; }
-  .form-fine { color: var(--muted); font-size: .78rem; text-align: center; margin: 0; display: flex; align-items: center; justify-content: center; gap: .35rem; }
-  .form-fine svg { color: var(--green); flex: none; }
-  .lead-success { text-align: center; padding: .5rem 0 .3rem; }
-  .lead-success[hidden] { display: none; }
-  .success-check { width: 60px; height: 60px; margin: .4rem auto 1.1rem; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--green); box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--green) 70%, transparent); }
-  .lead-success h3 { font-size: 1.35rem; }
-  .lead-success p { color: var(--muted); font-size: .95rem; margin-top: .6rem; }
-  #lead-fields[hidden], #form-fine[hidden] { display: none; }
-  .btn:disabled { cursor: default; opacity: .95; }
-  .btn:disabled:hover { transform: none; }
-  #lead-submit.is-sent { background: var(--green-deep); }
-  @keyframes mfade { from { opacity: 0; } }
-  @keyframes mpop { from { opacity: 0; transform: translateY(12px) scale(.98); } }
-  @media (prefers-reduced-motion: reduce) { .modal-overlay, .modal { animation: none; } }
 </style>
 
 <header class="bar">
@@ -281,7 +255,7 @@
       <a href="#exemplo">Exemplo</a>
       <a href="#faq">Dúvidas</a>
     </nav>
-    <a class="btn btn-primary btn-sm" href="#comecar" data-cta>Entrar na lista de espera</a>
+    <a class="btn btn-primary btn-sm" href="https://wa.me/55996516013?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20o%20TravelBot." target="_blank" rel="noopener">Entrar em contato para saber mais</a>
   </div>
 </header>
 
@@ -290,13 +264,12 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="pill"><span class="dot"></span> Seu agente de viagens no WhatsApp</span>
+        <span class="pill"><span class="dot"></span> Seu agente de viagens no WhatsApp e no Telegram</span>
         <h1>Planeje sua próxima viagem <span class="accent">conversando com uma IA.</span></h1>
-        <p class="lead">O TravelBot pesquisa opções de viagem, compara alternativas e ajuda você a encontrar a melhor forma de viajar usando milhas ou dinheiro — tudo pelo WhatsApp.</p>
+        <p class="lead">O TravelBot pesquisa opções de viagem, compara alternativas e ajuda você a encontrar a melhor forma de viajar usando milhas ou dinheiro — tudo pelo WhatsApp ou Telegram.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#comecar" data-cta>Entrar na lista de espera</a>
-          <a class="btn btn-ghost" href="#comecar" data-cta>Experimentar gratuitamente</a>
-        </div>
+          <a class="btn btn-green" href="https://wa.me/55996516013?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20o%20TravelBot." target="_blank" rel="noopener">Entrar em contato pelo WhatsApp</a>
+         </div>
         <div class="hero-trust">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           Sem instalar aplicativo · Basta enviar uma mensagem
@@ -399,8 +372,8 @@
         </div>
         <div class="card reveal">
           <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.4 8.4 0 0 1-4-1L3 20l1.1-5A8.4 8.4 0 1 1 21 11.5Z"/></svg></span>
-          <h3>Tudo no WhatsApp</h3>
-          <p>Sem instalar aplicativo. A conversa acontece onde você já está.</p>
+          <h3>No WhatsApp e no Telegram</h3>
+          <p>Sem instalar nada novo. A conversa acontece no app que você já usa.</p>
         </div>
         <div class="card reveal">
           <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/></svg></span>
@@ -418,7 +391,7 @@
         <span class="eyebrow">Exemplo de conversa</span>
         <h2 style="font-size:clamp(1.9rem,3.6vw,2.85rem);">Você diz o que quer. Ele volta com destinos que cabem no seu saldo.</h2>
         <p style="color:var(--muted); margin-top:1rem; font-size:1.08rem;">Nada de planilhas ou dezenas de abas abertas. Uma mensagem simples é o suficiente para o TravelBot montar opções reais — e ainda sugerir os próximos passos.</p>
-        <a class="btn btn-green" style="margin-top:1.8rem;" href="#comecar" data-cta>Quero conversar assim →</a>
+        <a class="btn btn-green" style="margin-top:1.8rem;" href="https://wa.me/5599651603?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20o%20TravelBot." target="_blank" rel="noopener">Entrar em contato para saber mais →</a>
       </div>
 
       <!-- Chat: praia / 120 mil milhas -->
@@ -526,7 +499,7 @@
           <summary>Preciso instalar aplicativo?
             <svg class="plus" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
           </summary>
-          <p class="ans">Não. Basta conversar pelo WhatsApp — onde você já troca mensagens todos os dias.</p>
+          <p class="ans">Não. Basta conversar pelo WhatsApp ou pelo Telegram — nos apps em que você já troca mensagens todos os dias.</p>
         </details>
         <details class="faq reveal">
           <summary>Posso pesquisar viagens usando milhas?
@@ -538,7 +511,7 @@
           <summary>Quanto custa?
             <svg class="plus" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
           </summary>
-          <p class="ans">Teremos planos para diferentes perfis de viajantes. Entre na lista de espera para ser avisado quando abrirmos as condições de lançamento.</p>
+          <p class="ans">Teremos planos para diferentes perfis de viajantes. Entre em contato pelo WhatsApp para saber mais sobre as condições de lançamento.</p>
         </details>
       </div>
     </div>
@@ -548,9 +521,11 @@
   <section class="final" id="comecar">
     <div class="wrap reveal">
       <div class="final-box">
-        <h2>Seu próximo agente de viagens é uma conversa no WhatsApp.</h2>
+        <h2>Seu próximo agente de viagens é uma conversa no WhatsApp ou no Telegram.</h2>
         <p>Descreva a viagem que você deseja e deixe a IA encontrar a melhor forma de te levar até lá.</p>
-        <a class="btn" href="#comecar" data-cta>Quero testar o TravelBot →</a>
+        <div class="final-actions">
+          <a class="btn" href="https://wa.me/55996516013?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20o%20TravelBot." target="_blank" rel="noopener">Entrar em contato pelo WhatsApp →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -559,45 +534,9 @@
 <footer>
   <div class="wrap foot-inner">
     <div class="brand"><span class="mark">✈</span> TravelBot</div>
-    <span>Consultor inteligente de viagens · Voos &amp; milhas · Pelo WhatsApp</span>
+    <span>Consultor inteligente de viagens · Voos &amp; milhas · No WhatsApp e no Telegram</span>
   </div>
 </footer>
-
-<!-- LEAD MODAL -->
-<div class="modal-overlay" id="lead-modal" hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-sub">
-    <button class="modal-close" type="button" id="modal-close" aria-label="Fechar formulário">✕</button>
-    <span class="modal-badge">✈ TravelBot</span>
-    <h3 id="modal-title">Entre para a lista</h3>
-    <p class="modal-sub" id="modal-sub">Deixe seus dados e nossa equipe entra em contato para você começar a usar o TravelBot.</p>
-    <form id="lead-form" novalidate>
-      <div id="lead-fields">
-        <label>Nome
-          <input type="text" name="nome" autocomplete="name" required placeholder="Seu nome completo">
-        </label>
-        <label>E-mail
-          <input type="email" name="email" autocomplete="email" required placeholder="voce@email.com">
-        </label>
-        <label>Telefone
-          <input type="tel" name="telefone" autocomplete="tel" required placeholder="(00) 00000-0000">
-        </label>
-        <p class="form-error" id="form-error" role="alert" hidden></p>
-      </div>
-      <div class="lead-success" id="lead-success" hidden>
-        <div class="success-check" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        </div>
-        <h3>Recebemos seus dados! 🎉</h3>
-        <p>Obrigado pelo interesse no TravelBot. Nossa equipe vai entrar em contato em breve.</p>
-      </div>
-      <button class="btn btn-green" type="submit" id="lead-submit" style="width:100%; margin-top:.4rem;">Enviar meus dados →</button>
-      <p class="form-fine" id="form-fine">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/></svg>
-        Seus dados são enviados com segurança para nossa equipe.
-      </p>
-    </form>
-  </div>
-</div>
 
 <script>
   (function () {
@@ -607,113 +546,5 @@
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
     }, { threshold: .12 });
     els.forEach(function (e) { io.observe(e); });
-  })();
-
-  /* ---- lead form → WhatsApp ---- */
-  (function () {
-    // URL /exec do Google Apps Script Web App que grava os leads na planilha.
-    var SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwbTcZfH8QG410jiOZmU6LMj4QF8ZV63ITRb4QW8Z-VWh_wbjZmLPKAZAwQuo0okyZ30Q/exec';
-
-    // Envia o lead para a planilha. Retorna uma Promise que resolve quando a
-    // requisição é concluída (resposta opaca em modo no-cors).
-    function sendToSheet(payload) {
-      if (!SHEETS_ENDPOINT) return Promise.resolve();
-      return fetch(SHEETS_ENDPOINT, {
-        method: 'POST', mode: 'no-cors', keepalive: true,
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      });
-    }
-
-    var overlay = document.getElementById('lead-modal');
-    var form = document.getElementById('lead-form');
-    var success = document.getElementById('lead-success');
-    var errorEl = document.getElementById('form-error');
-    var fields = document.getElementById('lead-fields');
-    var finePrint = document.getElementById('form-fine');
-    var submitBtn = document.getElementById('lead-submit');
-    var closeBtn = document.getElementById('modal-close');
-    var lastFocus = null;
-
-    function resetView() {
-      success.hidden = true;
-      fields.hidden = false;
-      finePrint.hidden = false;
-      errorEl.hidden = true;
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('is-sent');
-      submitBtn.textContent = 'Enviar meus dados →';
-      form.querySelectorAll('input').forEach(function (i) { i.removeAttribute('aria-invalid'); });
-    }
-    function open(e) {
-      if (e) e.preventDefault();
-      lastFocus = document.activeElement;
-      resetView();
-      overlay.hidden = false;
-      document.body.style.overflow = 'hidden';
-      var first = form.querySelector('input');
-      if (first) first.focus();
-    }
-    function close() {
-      overlay.hidden = true;
-      document.body.style.overflow = '';
-      resetView();
-      form.reset();
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
-    }
-    function fail(msg, field) {
-      errorEl.textContent = msg;
-      errorEl.hidden = false;
-      if (field) { field.setAttribute('aria-invalid', 'true'); field.focus(); }
-    }
-
-    // Todos os CTAs abrem o formulário de captura de leads
-    document.querySelectorAll('[data-cta]').forEach(function (a) {
-      a.addEventListener('click', open);
-    });
-    closeBtn.addEventListener('click', close);
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) close(); });
-
-    // Keep focus within the dialog
-    overlay.addEventListener('keydown', function (e) {
-      if (e.key !== 'Tab' || overlay.hidden) return;
-      var f = overlay.querySelectorAll('button, input');
-      if (!f.length) return;
-      var first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    });
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var nome = form.nome.value.trim();
-      var email = form.email.value.trim();
-      var tel = form.telefone.value.trim();
-
-      if (!nome) return fail('Informe o seu nome.', form.nome);
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Informe um e-mail válido.', form.email);
-      if (tel.replace(/\D/g, '').length < 8) return fail('Informe um telefone válido.', form.telefone);
-      errorEl.hidden = true;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Enviando…';
-
-      sendToSheet({ nome: nome, email: email, telefone: tel, origem: 'Landing TravelBot' })
-        .then(function () {
-          fields.hidden = true;
-          finePrint.hidden = true;
-          success.hidden = false;
-          submitBtn.disabled = true;
-          submitBtn.classList.add('is-sent');
-          submitBtn.textContent = '✓ Enviado';
-          closeBtn.focus();
-        })
-        .catch(function () {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Enviar meus dados →';
-          fail('Não foi possível enviar agora. Tente novamente em instantes.');
-        });
-    });
   })();
 </script>
